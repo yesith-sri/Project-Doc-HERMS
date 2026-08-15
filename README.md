@@ -1,3 +1,32 @@
 # Project-Doc-HERMS
 
-Project documentation for HERMS.
+Documentation repository for the **Hotel Equipment Rental Management System (HERMS)**, built by Vizualabs (Pvt) Ltd.
+
+## About HERMS
+
+HERMS is a business-management system for a company that rents cutlery and crockery (spoons, forks, soup bowls, and related equipment) to hotels and event organisers. It digitises the full rental cycle: quotation, order acceptance, delivery note issuance, retention (return) note processing, stock and discrepancy tracking, damage claims, automatic price escalation, payments, and management reporting.
+
+## Repository Contents
+
+| Document | Description |
+|----------|-------------|
+| [Project Overview.md](Project%20Overview.md) | Full Software Requirements Specification (SRS) v1.1 — functional & non-functional requirements, business rules, data model, workflow, and open items. |
+
+## Document Status
+
+- **Version:** 1.1
+- **Status:** Finalised — working version for architecture planning
+- **Date:** 15 August 2026
+
+> Items in Section 10.3 of the Project Overview are still pending client sign-off.
+
+## Quick Links
+
+- [Functional Requirements](Project%20Overview.md#3-system-features-functional-requirements)
+- [Business Rules](Project%20Overview.md#7-business-rules)
+- [Process Workflow](Project%20Overview.md#8-process-workflow-overview)
+- [Open Items](Project%20Overview.md#103-remaining-open-items--pending-client-confirmation)
+
+## Contact
+
+Vizualabs (Pvt) Ltd — info@vizualabs.com
