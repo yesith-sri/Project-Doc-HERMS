@@ -13,6 +13,8 @@ aliases:
   - Project Overview
 ---
 
+**VIZUALABS**
+
 # Hotel Equipment Rental Management System (HERMS)
 
 > [!info] Document Details
