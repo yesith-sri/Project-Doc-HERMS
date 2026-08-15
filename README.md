@@ -10,22 +10,20 @@ HERMS is a business-management system for a company that rents cutlery and crock
 
 | Document | Description |
 |----------|-------------|
-| [Project Overview.md](Project%20Overview.md) | Full Software Requirements Specification (SRS) v1.1 — functional & non-functional requirements, business rules, data model, workflow, and open items. |
+| [Project Overview.md](Project%20Overview.md) | Full Software Requirements Specification (SRS) v1.0 — functional & non-functional requirements, business rules, data model, workflow, and open items. |
 
 ## Document Status
 
-- **Version:** 1.1
-- **Status:** Finalised — working version for architecture planning
-- **Date:** 15 August 2026
-
-> Items in Section 10.3 of the Project Overview are still pending client sign-off.
+- **Version:** 1.0
+- **Status:** Draft for Review
+- **Date:** 11 August 2026
 
 ## Quick Links
 
 - [Functional Requirements](Project%20Overview.md#3-system-features-functional-requirements)
 - [Business Rules](Project%20Overview.md#7-business-rules)
 - [Process Workflow](Project%20Overview.md#8-process-workflow-overview)
-- [Open Items](Project%20Overview.md#103-remaining-open-items--pending-client-confirmation)
+- [Open Items](Project%20Overview.md#102-open-items-for-client-confirmation)
 
 ## Contact
 
