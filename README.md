@@ -38,6 +38,7 @@ It replaces the current manual, paper-based process with a fully digital workflo
 | Document | Description |
 |----------|-------------|
 | [Project Overview.md](Project%20Overview.md) | Full Software Requirements Specification (SRS) v1.0 — functional & non-functional requirements, business rules, data model, workflow, and open items. |
+| [Implementation Roadmap](docs/roadmap/README.md) | Dependency-aware delivery phases, architecture alignment, MVP scope, agentic workflow strategy, and open decisions. |
 
 ## 📋 Document Status
 
@@ -56,6 +57,7 @@ It replaces the current manual, paper-based process with a fully digital workflo
 - [Process Workflow](Project%20Overview.md#8-process-workflow-overview)
 - [Data Requirements](Project%20Overview.md#5-data-requirements)
 - [Open Items](Project%20Overview.md#102-open-items-for-client-confirmation)
+- [Implementation Roadmap](docs/roadmap/README.md)
 
 ## 👥 User Roles
 
