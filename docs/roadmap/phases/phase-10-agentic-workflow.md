@@ -19,6 +19,10 @@ Add useful agent assistance without allowing an AI system to bypass HERMS author
 
 Agentic workflow is not currently defined in the SRS. An agent can only be trusted after the deterministic workflows, permissions, audit events, idempotency, and operational recovery paths from Phases 0–9 are stable.
 
+## Prerequisites (Inputs from Phases 0–9)
+
+- Stable deterministic workflows, audit log, permissions, event history, and operational metrics — plus client approval and a change request for agentic scope.
+
 ## Recommended Rollout
 
 ### Stage 1: Read-only Assistance
@@ -80,6 +84,10 @@ Agentic workflow is a proposed future capability and is not a current SRS requir
 - Retries cannot duplicate a business effect.
 - Manual processing remains available for every agent-assisted workflow.
 - Pilot results demonstrate acceptable accuracy, audit completeness, and safe failure behavior.
+
+## Outputs
+
+- Read-only assistance first; bounded automation only after production evidence and client approval.
 
 ## Delivery Priority
 

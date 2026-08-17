@@ -15,6 +15,17 @@ This roadmap translates the requirements in [`Project Overview.md`](../../Projec
 
 Read this before starting any work. Phases are ordered by dependency, not by how interesting the feature is.
 
+## Implementing a Phase (Reading Order)
+
+Before writing code for a phase, read in this order:
+
+1. [Invariants](invariants.md) — the 12 rules that hold in every phase.
+2. [Architecture docs](../architecture/) — system, backend, database-schema, frontend (the "how").
+3. The phase file under `phases/` (the "what, in what order"): prerequisites, work items, schema changes, API endpoints, frontend, tests, definition of done, outputs.
+4. The relevant FR-/BR- sections verbatim in `Project Overview.md`.
+
+Each phase file lists its **Prerequisites** (inputs) and **Outputs** (handoff), so phases chain together. Confirm the previous phase's outputs exist before starting the next.
+
 ## Ordering Rationale
 
 > Data integrity before money, money before dashboards, dashboards before nice-to-haves.

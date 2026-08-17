@@ -15,6 +15,10 @@ status: draft
 
 Verify non-functional requirements, ship low-priority features, and rehearse operational procedures before and after launch.
 
+## Prerequisites (Inputs from Phases 0–8)
+
+- All MVP features implemented and the dashboard live.
+
 ## Scope
 
 - Reorder threshold alerts (FR-6.4, priority `C`).
@@ -32,6 +36,10 @@ Verify non-functional requirements, ship low-priority features, and rehearse ope
 - Accounting integration.
 
 Keep the schema multi-store-ready (§6.5) without building it.
+
+## Outputs (Handoff to Phase 10)
+
+- A hardened, measured, backed-up system ready for launch and for optional agentic assistance.
 
 ## Delivery Priority
 

@@ -15,32 +15,48 @@ status: draft
 
 Prove that one request travels browser → Nginx → Lambda → Neon → back, in CI, on day one. The diagram has four independently deployed pieces; prove the seams before there is any business logic to debug on top of them.
 
-## Scope
-
-| Area | Decision |
-|---|---|
-| Repo | Monorepo: `apps/web` (TanStack), `apps/api` (Hono), `apps/notifier`, `packages/db`, `packages/shared` |
-| DB | Neon PostgreSQL + Drizzle migrations, checked into git, forward-only |
-| API | Hono on Lambda Function URL, `GET /api/health` returning DB round-trip time |
-| Web | TanStack Start on Hostinger VPS, Nginx serving static plus proxying `/api/*` same-origin |
-| CI/CD | Two pipelines: VPS rsync/deploy and Lambda deploy. Migrations run as a gated step, never automatically on cold start |
-| Observability | Structured JSON logs with request ID propagated web → api → notifier |
-| Seed | `pnpm db:seed` — 3 customers, 8 equipment items, 1 user per role |
-
 ## Why This Comes First
 
 Every later phase debugs on top of these seams. If deployment, database access, or request routing is unreliable, the failure surfaces inside business logic where it is far more expensive to fix.
 
-## Long-lead Items Started in Parallel
+## Prerequisites
 
-Do not block this phase on them:
+- Git repo and `pnpm` workspaces available.
+- Accounts/projects: AWS (Lambda Function URL + SQS), Neon PostgreSQL, Hostinger VPS.
+- Confirmed domain and Nginx access on the VPS.
+- Architecture reviewed: [system-architecture.md](../../architecture/system-architecture.md).
 
-- WhatsApp Business API / BSP account application (SRS §4.3, §10.2).
-- Client confirmation of printed DN/RN field layout (SRS §10.2, §11.1, §11.2).
+## Work Items (in order)
+
+1. Scaffold the monorepo: `apps/web`, `apps/api`, `apps/notifier`, `packages/db`, `packages/shared`.
+2. `packages/db`: Drizzle config, first forward-only migration, migration runner.
+3. `apps/api`: Hono app with `GET /api/health` returning `{ ok, dbRoundTripMs }`.
+4. `apps/api`: deploy to Lambda Function URL via CI.
+5. `apps/web`: TanStack Start static shell; Nginx serves it and proxies `/api/*` same-origin.
+6. CI/CD: two pipelines (VPS rsync/deploy, Lambda deploy); migrations as a gated step, never auto-applied on cold start.
+7. Observability: structured JSON logs + request-ID middleware propagated web → api → notifier.
+8. Seed harness: `pnpm db:seed` command (data is added in Phase 1 once schema exists).
+9. Write and test the rollback procedure once.
+
+## Schema Changes
+
+None beyond the migration tooling. No business tables yet — Phase 1 creates the first schema. Reference [database-schema.md](../../architecture/database-schema.md) for what comes next.
+
+## API Endpoints
+
+| Method | Path | Purpose |
+|---|---|---|
+| GET | `/api/health` | Returns `ok` and DB round-trip time |
+
+## Frontend Deliverables
+
+- Static shell rendered by TanStack Start.
+- Nginx config: serve static + proxy `/api/*`.
+- (Optional) a health status page.
 
 ## Decisions Locked Here
 
-- Neon driver choice (HTTP/serverless driver vs classic pooled `pg`) — decide now and never revisit.
+- Neon driver: HTTP/serverless driver, not a pooled `pg` connection per invocation.
 - `proxy_read_timeout` on Nginx must exceed the Lambda's own timeout.
 - Migration strategy: forward-only, gated, never auto-applied on cold start.
 
@@ -49,12 +65,24 @@ Do not block this phase on them:
 - Sections 2.4 to 2.6, 6.1, 6.3 of `Project Overview.md`.
 - `Untitled Diagram.drawio.png`: the four deployed pieces and their seams.
 
-## Exit Criteria
+## Tests
+
+- Health check returns 200 with a real DB round-trip.
+- A pushed commit deploys both web and API (deploy smoke test).
+
+## Definition of Done
 
 - A pushed commit deploys both web and API automatically.
 - Health check is green from a real browser.
 - The rollback procedure is written down and tested once.
 - The 3-second dashboard NFR (§6.1) is measurable from day one as a cold-start + database round-trip baseline.
+
+## Outputs (Handoff to Phase 1)
+
+- Working monorepo and CI/CD.
+- Reachable Neon + migration runner.
+- Lambda Function URL behind Nginx same-origin proxy.
+- Observability middleware and seed harness.
 
 ## Delivery Priority
 

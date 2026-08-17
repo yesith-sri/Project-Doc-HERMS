@@ -20,13 +20,23 @@ Make communication reliable and asynchronous: drain the outbox, deliver via SQS,
 
 Phases 2–4 wrote to an outbox instead of calling providers directly, so nothing has to be rewritten — only drained.
 
-## Scope
+## Prerequisites (Inputs from Phases 2–4)
 
-- Transactional outbox → publisher → SQS. The API writes the outbox row in the same transaction as the business change; a publisher moves rows to SQS.
-- Do **not** `PutMessage` to SQS from inside the request path — a post-commit failure silently loses the notification.
-- Notification Lambda consumes SQS, has its own deploy, a DLQ attached, and an alarm on DLQ depth > 0.
-- Providers: WhatsApp Business API primary, automatic SMS fallback on delivery failure (SRS §4.3), email for back-office notices.
-- Idempotency key per notification — SQS delivers at-least-once, and customers must not receive a quotation twice.
+- `outbox` rows written by quotation, note, and approval flows.
+- Confirmed notification provider (D-01) and the WhatsApp BSP application from Phase 0.
+
+## Work Items (in order)
+
+1. Outbox publisher: drain `pending` rows → SQS (never `PutMessage` from the request path).
+2. SQS queue + dead-letter queue + alarm on DLQ depth > 0.
+3. `apps/notifier`: Notification Lambda consuming SQS, own deploy.
+4. Provider integration: WhatsApp primary, SMS fallback, email back-office (SRS §4.3).
+5. Idempotency key per notification (dedupe at-least-once deliveries).
+6. Wire up events: quotation to customer (FR-2.2), note link to field staff (FR-11.1), pending-approval alert and approval alert (FR-11.4), link resend (FR-11.5).
+
+## Schema Changes
+
+None — `outbox` was created in Phase 2. This phase only drains it.
 
 ## Notifications to Wire Up
 
@@ -35,21 +45,31 @@ Phases 2–4 wrote to an outbox instead of calling providers directly, so nothin
 - Admin alert on pending approval; sales/finance alert on approval (FR-11.4).
 - Link resend/regenerate with attribution (FR-11.5).
 
+## Invariants Touched
+
+- **I-12** — outbox before provider; idempotent consumers.
+
 ## Requirements Traceability
 
 - FR-2.2: quotation delivery.
 - FR-11.4, FR-11.5: approval alerts and link resend.
 - SRS §4.3: notification strategy and fallback.
 
-## Dependencies
-
-Phases 2–4 outbox writes; confirmed notification provider.
-
-## Exit Criteria
+## Tests
 
 - Killing the WhatsApp credential causes messages to fall back to SMS.
 - Messages reach the DLQ only after both primary and fallback fail.
 - Re-delivery never produces a duplicate quotation or link.
+
+## Definition of Done
+
+- Provider failures retry without duplicating business records.
+- DLQ depth is alarmed and observable.
+- Every notification is traceable to its source `outbox` event.
+
+## Outputs (Handoff to Phases 6–8)
+
+- Production notifications for all events; DLQ observability.
 
 ## Delivery Priority
 
