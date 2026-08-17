@@ -1,5 +1,5 @@
 ---
-title: Phase 7 - Agentic Workflow and Human Approval
+title: Phase 10 - Agentic Workflow and Human Approval
 date: 2026-08-17
 tags:
   - herms
@@ -9,7 +9,7 @@ tags:
 status: future
 ---
 
-# Phase 7: Agentic Workflow and Human Approval
+# Phase 10: Agentic Workflow and Human Approval
 
 ## Goal
 
@@ -17,7 +17,7 @@ Add useful agent assistance without allowing an AI system to bypass HERMS author
 
 ## Why This Comes Last
 
-Agentic workflow is not currently defined in the SRS. An agent can only be trusted after the deterministic workflows, permissions, audit events, idempotency, and operational recovery paths from Phases 1 through 6 are stable.
+Agentic workflow is not currently defined in the SRS. An agent can only be trusted after the deterministic workflows, permissions, audit events, idempotency, and operational recovery paths from Phases 0–9 are stable.
 
 ## Recommended Rollout
 
