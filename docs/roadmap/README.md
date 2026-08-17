@@ -28,6 +28,15 @@ Read this before starting any work. Phases are ordered by dependency, not by how
 
 Twelve non-negotiable rules govern every phase. An agent may not weaken one to make a task pass — if a task appears to require breaking one, stop and raise it. They are the single source of truth for stock, price history, claims, reconciliation, attribution, links, money, and notification ordering. See [Invariants](invariants.md).
 
+## Architecture
+
+Component-level design lives in the [architecture docs](../architecture/):
+
+- [System Architecture](../architecture/system-architecture.md) — topology, flows, decisions.
+- [Backend](../architecture/backend.md) — Hono monolith, domain services, outbox.
+- [Database Schema](../architecture/database-schema.md) — Neon PostgreSQL, tables, invariants.
+- [Frontend](../architecture/frontend.md) — TanStack Start, back-office and mobile forms.
+
 ## Delivery Order
 
 | Order | Phase | Outcome | Priority |
