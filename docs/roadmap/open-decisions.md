@@ -11,7 +11,7 @@ status: needs-review
 
 # Open Decisions and Implementation Risks
 
-These items should be resolved before the affected phase is marked complete. They are based on the SRS, the `IMPORTANT .docx` client notes, and the supplied architecture diagram. Deployment-specific risks live in [Architecture Risks](../architecture-risks.md).
+These items should be resolved before the affected phase is marked complete. They are based on the SRS, the `IMPORTANT .docx` client notes, and the supplied architecture diagram. Deployment-specific risks live in [Architecture Risks](architecture-risks.md).
 
 ## Client Decisions
 

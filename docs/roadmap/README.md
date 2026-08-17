@@ -24,6 +24,10 @@ Read this before starting any work. Phases are ordered by dependency, not by how
 3. **The dashboard is downstream of everything.** Building it early means building it three times.
 4. **WhatsApp is a long-lead external dependency, not a phase.** Business API / BSP onboarding takes weeks and is still an open client item (SRS §10.2). Start the application in Phase 0, ship Phases 1–4 behind a copy-link fallback, and land the channel in Phase 5.
 
+## Invariants
+
+Twelve non-negotiable rules govern every phase. An agent may not weaken one to make a task pass — if a task appears to require breaking one, stop and raise it. They are the single source of truth for stock, price history, claims, reconciliation, attribution, links, money, and notification ordering. See [Invariants](invariants.md).
+
 ## Delivery Order
 
 | Order | Phase | Outcome | Priority |
@@ -94,7 +98,7 @@ Cold-start behaviour, Neon connection handling, the two-runtime trade-off, proxy
 
 ## Open Decisions
 
-Client confirmations and requirement ambiguities that must be resolved before their phase closes are tracked in [Open Items and Risks](decisions/open-items-and-risks.md).
+Client confirmations and requirement ambiguities that must be resolved before their phase closes are tracked in [Open Decisions](open-decisions.md).
 
 ## Source Documents
 
