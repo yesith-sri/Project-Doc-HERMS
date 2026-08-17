@@ -44,3 +44,5 @@ These items should be resolved before the affected phase is marked complete. The
 ## Resolution Rule
 
 No implementation should silently choose a behavior that affects stock, money, price history, authorization, or customer responsibility. Record the decision, update the SRS, and add or update acceptance criteria before closing the relevant roadmap phase.
+
+Where a task depends on an open item, implement it behind a config flag and flag it in the task report — do not invent an answer. Equipment is counted in whole units with no batch/lot tracking unless the client states otherwise (SRS §2.6).

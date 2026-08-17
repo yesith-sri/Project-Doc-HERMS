@@ -53,6 +53,23 @@ Component-level design lives in the [architecture docs](../architecture/):
 | 9 | [Hardening and Could-haves](phases/phase-09-hardening-could-haves.md) | NFR verification, printed layouts, backups | Should have |
 | 10 | [Agentic Workflow](phases/phase-10-agentic-workflow.md) | Safe human-in-the-loop assistance | Later / optional |
 
+## Requirement ID → Phase Map
+
+Use this to answer "where does this belong?" without re-reading the roadmap.
+
+| Phase | Requirements |
+|---|---|
+| 0 Skeleton | infra only; start WhatsApp BSP application |
+| 1 Identity & master data | FR-12.1, FR-12.3, FR-1.1→1.5, FR-9.7 |
+| 2 Quotation → Order | FR-2.1, FR-2.3, FR-2.4 (FR-2.2 to outbox only) |
+| 3 Ledger, DN, links, approval | FR-6.1, FR-6.2, FR-3.1→3.5, FR-11.1→11.3, FR-11.5, FR-7.1→7.5, FR-12.2, FR-5.1 |
+| 4 RN & reconciliation | FR-4.1→4.7, FR-6.3, FR-6.5, FR-5.5 |
+| 5 Async & notifications | FR-2.2, FR-11.4, FR-11.5 dispatch |
+| 6 Finance | FR-8.1→8.5 |
+| 7 Claims & escalation | FR-9.1→9.6 |
+| 8 Dashboard | FR-10.1→10.7, FR-5.2→5.4 |
+| 9 Hardening | FR-6.4, NFR §6.1–§6.6 |
+
 ## Dependency Graph
 
 ```mermaid
@@ -100,6 +117,61 @@ The MVP is not complete unless it can enforce these controls:
 - Quotations and orders retain the exact price agreed at the time.
 - Notifications are idempotent and recoverable through a dead-letter queue.
 - Customer claims use the approved responsibility and point-in-time historical price rules.
+
+## Domain Vocabulary
+
+Use the client's exact words in code, UI copy, and commit messages. The client is replacing paper documents and must recognise the digital ones.
+
+- **Delivery Note (DN)** — stock issued and handed over. Fields `issued_qty`, `handed_over_qty`.
+- **Retention Note (RN)** — equipment returned. Fields `returned_qty`, `balance_qty`, `missing_damaged_qty`. Not "return note".
+- **Discrepancy** — a mismatch with type, reason, and responsible party.
+- **Responsible Party** — `Customer` or `Staff Member`. Determines billability.
+- **Recurring / New customer** — determines the pricing model, nothing else.
+- **Store Admin** — the approver; the only role that can move stock.
+
+## Working Conventions
+
+### Workflow for any task
+
+1. Locate the task in a phase. If it belongs to a later phase, say so and ask before pulling work forward.
+2. Collect the FR-/BR- IDs and read them verbatim in the SRS; note the MoSCoW priority.
+3. Name which invariants (I-1 … I-12) the task touches; raise a conflict before writing code.
+4. State the plan in a few lines, including the schema change, before editing files.
+5. Schema first: Drizzle migration, then API, then UI. Never let the UI shape the schema.
+6. Write the invariant test with the feature, not after it.
+7. Close the loop: typecheck, tests, migration applied against a scratch branch. Report satisfied vs open FR IDs.
+
+### Stack rules
+
+- **Validate once, shared** — Zod schemas live in `packages/shared` and are used by both the Hono route and the TanStack form.
+- **Neon driver** — HTTP/serverless driver; never a pooled TCP connection per Lambda invocation.
+- **Migrations** — forward-only, checked in, run as a gated deploy step, never on cold start.
+- **Money** — integer cents (I-10). Money and stock arithmetic never happens in the frontend; the API returns computed values and the UI formats them.
+- **Audit** — every mutating route writes an audit row (I-8).
+- **No direct provider calls** — notification intent goes to `outbox` (I-12).
+
+### Do not
+
+- Build a manual stock-adjustment feature (I-1).
+- Add multi-currency, a customer self-service portal, barcode/RFID counting, multi-branch consolidation, or accounting integration (SRS §10.1). Keep the schema multi-store-ready without building it.
+- Use EventBridge for link expiry — check expiry at read time.
+- Implement the six-month escalation as a six-monthly cron — run a daily idempotent "is anything due today?" job.
+- Enforce reconciliation on individual partial retention notes (I-6).
+- Read `items.current_price` when pricing a claim or rendering a historical document (I-4, I-11).
+- Build dashboard tiles before Phase 8.
+
+## Task Reporting Format
+
+End every task with:
+
+```
+Phase:        <n> — <name>
+Satisfied:    FR-x.y, FR-x.z
+Invariants:   I-n (how upheld)
+Tests added:  <names>
+Open items:   <client decisions or deferred S/C items>
+Next:         <the next task in this phase, or "phase complete">
+```
 
 ## Architecture Risks
 

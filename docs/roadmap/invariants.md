@@ -118,3 +118,20 @@ Two exceptions where the SRS's own priority understates the dependency:
 
 - **FR-4.6** (multiple partial retention notes) is marked `S` but must ship with Phase 4 — it defines the reconciliation model in I-6.
 - **FR-1.5 / FR-9.7** (price history + immutability) must exist from Phase 1, well before the Phase 7 features that consume them.
+
+---
+
+## Tests That Must Exist
+
+Regression guards for the invariants, not coverage theatre. These tests must never be deleted; if a change breaks one, the change is wrong — not the test.
+
+1. Submitting a note leaves stock **unchanged**; approving it changes stock (I-1).
+2. No route other than approval can insert a stock-ledger row (I-1).
+3. Approval is refused when no counted quantity was entered (I-2).
+4. `UPDATE` on `price_history` is rejected by the database (I-3).
+5. Damage recorded before an escalation date bills at the **pre-escalation** price after escalation has run (I-4).
+6. A staff-responsible discrepancy cannot be raised as a claim (I-5).
+7. A claim does not appear in the customer balance until Finance confirms (I-5).
+8. Order delivered 100 / returned 60 + 30 / missing 8 / damaged 2 reconciles and closes; the same order with 99 accounted for refuses to close (I-6).
+9. Running the escalation job twice in one day produces one price-history row per item (Phase 7 idempotency).
+10. An expired link token is refused; a valid token grants access to its own note only (I-9).
